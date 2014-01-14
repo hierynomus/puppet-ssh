@@ -1,11 +1,11 @@
-# Sshkey Puppet Module for Boxen
+# Ssh Puppet Module for Boxen
 
 This module automates generating and uploading ssh keys to github.
 
 ## Usage
 
 ```puppet
-sshkey { 'tpetr':
+ssh::key { 'tpetr':
 	
 }
 
