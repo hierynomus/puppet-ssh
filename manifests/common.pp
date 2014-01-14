@@ -1,5 +1,5 @@
 class ssh::common {
-  include boxen::confine
+  include boxen::config
 
   $upload_sshkey_path = "${boxen::config::home}/bin/upload_sshkey.sh"
 

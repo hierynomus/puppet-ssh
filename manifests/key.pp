@@ -27,5 +27,5 @@ define ssh::key (
   }
 
   File[$path] -> Exec["generate $name key"] -> Exec["upload $name key"] -> Exec["test $name key"]
-  File[$::sshkey::common::upload_sshkey_path] -> Exec["upload $name key"]
+  File[$::ssh::common::upload_sshkey_path] -> Exec["upload $name key"]
 }
