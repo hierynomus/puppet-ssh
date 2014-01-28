@@ -16,6 +16,10 @@ define ssh::key (
     command => "ssh-keygen -f ${private_key_file} -t rsa -N '' -C ${domain}",
     creates => $private_key_file,
   }
+  
+  exec { "add $name key":
+    command => "ssh-add ${private_key_file}"
+  }
 
   exec { "test $name key":
     command => "ssh -T git@${domain}",
@@ -26,6 +30,6 @@ define ssh::key (
     command => "${::ssh::common::upload_sshkey_path} \"$domain\" \"$api_base_url\" \"${::github_token}\" \"$public_key_file\""
   }
 
-  File[$path] -> Exec["generate $name key"] -> Exec["upload $name key"] -> Exec["test $name key"]
+  File[$path] -> Exec["generate $name key"] -> Exec["upload $name key"] -> Exec["add $name key"] -> Exec["test $name key"]
   File[$::ssh::common::upload_sshkey_path] -> Exec["upload $name key"]
 }
