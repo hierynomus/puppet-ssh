@@ -13,7 +13,7 @@ define ssh::key (
   }
 
   exec { "generate $name key":
-    command => "ssh-keygen -f -t rsa -N -C ${domain}",
+    command => "ssh-keygen -f ${private_key_file} -t rsa -N '' -C ${domain}",
     creates => $private_key_file,
   }
 
