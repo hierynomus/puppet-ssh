@@ -17,8 +17,9 @@ define ssh::key (
     creates => $private_key_file,
   }
   
-  exec { "add $name key":
-    command => "ssh-add ${private_key_file}"
+  exec { "add known host ${domain}":
+    command => "ssh-keyscan -H ${domain} >> ~/.ssh/known_hosts",
+    unless => "grep ${domain} ~/.ssh/known_hosts",
   }
 
   exec { "test $name key":
@@ -30,6 +31,6 @@ define ssh::key (
     command => "${::ssh::common::upload_sshkey_path} \"$domain\" \"$api_base_url\" \"${::github_token}\" \"$public_key_file\""
   }
 
-  File[$path] -> Exec["generate $name key"] -> Exec["upload $name key"] -> Exec["add $name key"] -> Exec["test $name key"]
+  File[$path] -> Exec["generate $name key"] -> Exec["upload $name key"] -> Exec["add known host ${domain}"] -> Exec["test $name key"]
   File[$::ssh::common::upload_sshkey_path] -> Exec["upload $name key"]
 }
