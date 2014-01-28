@@ -5,7 +5,7 @@ class ssh::common {
 
   file { $upload_sshkey_path:
     ensure  => present,
-    source  => 'puppet:///modules/sshkey/upload_sshkey.sh',
+    source  => 'puppet:///modules/ssh/upload_sshkey.sh',
     mode    => '0755',
   }
 }
