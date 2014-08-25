@@ -2,6 +2,7 @@ define ssh::key (
   $path = "/Users/${::boxen_user}/.ssh",
   $domain = "github.com",
   $api_base_url = "https://api.github.com",
+  $upload_key = true,
 ) {
   require ssh::common
 
@@ -27,10 +28,12 @@ define ssh::key (
     returns => [1],
   }
 
-  exec { "upload $name key":
-    command => "${::ssh::common::upload_sshkey_path} \"$domain\" \"$api_base_url\" \"${::github_token}\" \"$public_key_file\""
+  if $upload_key {
+    exec { "upload $name key":
+      command => "${::ssh::common::upload_sshkey_path} \"$domain\" \"$api_base_url\" \"${::github_token}\" \"$public_key_file\"",
+      require => File[$::ssh::common::upload_sshkey_path],
+    }
   }
 
   File[$path] -> Exec["generate $name key"] -> Exec["upload $name key"] -> Exec["add known host ${domain}"] -> Exec["test $name key"]
-  File[$::ssh::common::upload_sshkey_path] -> Exec["upload $name key"]
 }
