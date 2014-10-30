@@ -26,7 +26,7 @@ define ssh::key (
 
   if $upload_key {
     exec { "upload $name key":
-      command => "${::ssh::common::upload_sshkey_path} \"$domain\" \"$api_base_url\" \"${::github_token}\" \"$public_key_file\"",
+      command => "${::ssh::common::upload_sshkey_path} \"$domain\" \"$api_base_url\" \"${::boxen_user}\" \"$public_key_file\"",
       require => [File[$::ssh::common::upload_sshkey_path], Exec["generate $name key"]],
     }
 
