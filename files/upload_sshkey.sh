@@ -2,11 +2,11 @@
 
 DOMAIN=$1
 API_BASE=$2
-USER=$3
+TOKEN=$3
 PUBKEY_PATH=$4
 
 PUBKEY=$(cat ${PUBKEY_PATH})
-STATUS=$(curl --user $USER -s -o /dev/null -w "%{http_code}" "${API_BASE}/user/keys" -X POST -d "{\"title\": \"${DOMAIN}\", \"key\": \"${PUBKEY}\"}")
+STATUS=$(curl -H "Authorization: token ${TOKEN}" -s -o /dev/null -w "%{http_code}" "${API_BASE}/user/keys" -X POST -d "{\"title\": \"${DOMAIN}\", \"key\": \"${PUBKEY}\"}")
 
 if [ "${STATUS}" == "201" ]; then
 	echo "Added SSH key"
